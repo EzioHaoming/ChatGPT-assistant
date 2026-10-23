@@ -1,2 +1,47 @@
-# ChatGPT-assistant
-Windows desktop floating assistant for screenshot trnslation and questions. Private development repositoy.
+# ChatGPT assistant
+
+用于截图翻译与文字提问的桌面悬浮助手。当前仓库收录 Windows 版源码。
+
+## Windows
+
+- 支持区域截图、截图翻译、带图提问和不带截图的文字提问。
+- 支持 Markdown 与数学公式显示、复制回答、模型选择和自定义快捷键。
+- 悬浮头像支持拖动贴边、展开收起、更换头像和撤回更改。
+- 可配置独立 ChatGPT OAuth 通道，或使用自己的兼容 API 服务。
+
+[安装、使用与模型配置说明](windows/README.md) · [更新记录](windows/CHANGELOG.md)
+
+## 从源码构建
+
+需要 Windows 11 和 .NET 10 SDK。在仓库根目录执行：
+
+```powershell
+dotnet publish windows/src/Desktop/ScreenshotAssistant.csproj -c Release -r win-x64 --self-contained true -p:PublishSingleFile=true -o dist/windows
+```
+
+构建结果为 `dist/windows/ChatGPT assistant.exe` 及其依赖文件。请保留同目录的依赖。
+
+ChatGPT OAuth 模式还需要 Python、桥接依赖和对应的 Codex App Server 配置，见 Windows 使用说明。API 模式需要使用者自行提供服务地址、模型与 API Key。
+
+## 本地测试
+
+以下测试不提交模型请求：
+
+```powershell
+& 'dist/windows/ChatGPT assistant.exe' --test-avatar-undo "$PWD/avatar-checks.json"
+& 'dist/windows/ChatGPT assistant.exe' --test-api "$PWD/api-checks.json"
+```
+
+## macOS
+
+macOS v0.1.2 的安装包已另行构建，但该版本的完整源码尚未合入本仓库。这里没有用早期预览源码替代它；当前仓库不能用于复现 Mac v0.1.2。
+
+## 数据与授权
+
+每位使用者使用自己的账号授权或 API Key。仓库不包含个人头像、API Key、OAuth 令牌或登录数据。请求会发送到所配置的服务，用量及费用以对应账号和服务商规则为准。
+
+Windows 头像保存在 `%USERPROFILE%\.chatgpt-assistant\avatar.png`，可跨不同启动方式保留；旧头像自动迁移。其他设置与授权存储方式见使用说明。
+
+## 许可证状态
+
+项目尚未选择开源许可证。当前公开授权范围不应从仓库可见性推断。第三方依赖的许可证保留在 `windows/licenses/`。
