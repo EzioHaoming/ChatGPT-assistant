@@ -2,6 +2,8 @@
 
 用于截图翻译与文字提问的桌面悬浮助手。当前仓库收录 Windows 版源码。
 
+个人开发的非官方应用，与 OpenAI 无隶属关系，也未获得其官方背书。当前为预览版；Windows 开源，Mac 提供预览程序包，Mac v0.1.2 完整源码暂缺。
+
 ## Windows
 
 - 支持区域截图、截图翻译、带图提问和不带截图的文字提问。
@@ -44,4 +46,4 @@ Windows 头像保存在 `%USERPROFILE%\.chatgpt-assistant\avatar.png`，可跨�
 
 ## 许可证状态
 
-项目尚未选择开源许可证。当前公开授权范围不应从仓库可见性推断。第三方依赖的许可证保留在 `windows/licenses/`。
+本仓库已提供的项目源码采用 [MIT License](LICENSE)。第三方依赖继续遵循各自许可证，见 `windows/licenses/`。Mac v0.1.2 仅提供预览程序包，完整源码尚未提供，不能通过本仓库复现该版本。
