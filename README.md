@@ -6,11 +6,11 @@
 
 ## 下载
 
-### [⬇️ ChatGPT assistant for Windows](https://github.com/EzioHaoming/ChatGPT-assistant/releases/download/v0.1.2-preview.20261024/ChatGPT-assistant-Windows-x64.zip)
+### [⬇️ ChatGPT assistant for Windows](https://github.com/EzioHaoming/ChatGPT-assistant/releases/download/v0.1.3-preview.20261024/ChatGPT-assistant-Windows-x64.zip)
 
 适用于 **Windows 11 x64**。下载 ZIP 后完整解压，运行 `ChatGPT assistant.exe`。
 
-[使用说明](windows/README.md) · [源码](windows/src/Desktop) · [发布说明与 SHA256 校验文件](https://github.com/EzioHaoming/ChatGPT-assistant/releases/tag/v0.1.2-preview.20261024)
+[使用说明](windows/README.md) · [源码](windows/src/Desktop) · [发布说明与 SHA256 校验文件](https://github.com/EzioHaoming/ChatGPT-assistant/releases/tag/v0.1.3-preview.20261024)
 
 ### [⬇️ ChatGPT assistant for macOS](https://github.com/EzioHaoming/ChatGPT-assistant/releases/download/macOS-v0.1.2/ChatGPT-assistant-arm64.zip)
 
