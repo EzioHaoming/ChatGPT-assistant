@@ -1,6 +1,6 @@
 # ChatGPT assistant使用说明
 
-更新：2026-10-22 · 悬浮窗恢复 / 头像撤回版 · Windows 11 x64
+适用系统：Windows 11 x64
 
 ## 先选使用方式
 
@@ -19,7 +19,7 @@
 
 ## A. ChatGPT 用户：独立授权模式
 
-此模式需要额外环境，尚未在全新电脑完成端到端验收。包内提供桥接脚本，不捆绑 Python、Chrome 或 Codex App Server。已验证的 App Server 版本是 0.163.0-alpha.11；其他版本可能存在接口差异。不要为运行本软件复制别人的授权文件。
+此模式需要额外安装环境。包内提供桥接脚本，不捆绑 Python、Chrome 或 Codex App Server。已验证的 App Server 版本是 0.163.0-alpha.11；其他版本可能存在接口差异。不要为运行本软件复制别人的授权文件。
 
 1. 安装 Python 3.11 或更高版本、Google Chrome，以及支持官方 SIWC 通道的 Codex App Server。Codex 安装及 App Server 的官方入口见下方链接。必须找到实际可执行文件的完整路径；仅在桌面安装应用不保证 PowerShell 能识别 `codex` 命令。
 2. 在解压目录打开 PowerShell，运行以下命令，建立桥接环境：
@@ -43,7 +43,7 @@ Copy-Item bridge-config.example.json bridge-config.json
 可在 PowerShell 用 `Test-Path '实际路径'` 分别检查，三个路径都应返回 True。如果命令 `python` 不存在，先完成 Python 安装；如果 `codex` 不在 PATH，请填写实际 EXE 路径，不要填 `.cmd` 启动脚本。
 
 4. 打开助手的“设置与账户 → API 设置”，确保未勾选“使用自定义 API”。然后点击“ChatGPT 授权”。
-5. 在 Chrome 中由本人完成 OpenAI 官方登录与计划用量授权。当前桥接保留最初验证工具名称 `codex_vision_local_test`，授权页面可能显示此名称。首次通过官方动态客户端流程注册并保存本安装的客户端信息，不需要手工填写 client secret 或单独的 OpenAI API Key。已有 Codex CLI 登录不会直接代替此次授权。
+5. 在 Chrome 中由本人完成 OpenAI 官方登录与计划用量授权。授权页面可能显示应用名称 `codex_vision_local_test`。首次通过官方动态客户端流程注册并保存本安装的客户端信息，不需要手工填写 client secret 或单独的 OpenAI API Key。已有 Codex CLI 登录不会直接代替此次授权。
 6. 回到助手，点击“刷新模型”，选择账号可用的图片模型。选择会记住；默认 gpt-6-luna。如默认模型不在账号列表中，请手动改选。
 
 官方说明：此授权使用已有的 Codex / ChatGPT Work 计划用量，连接应用不会增加额外额度；不是普通网页聊天消息额度。请求成功或显示 tokens 均不表示免费或用量为零。账号不具备所需权限、官方预览规则变化时，可能无法使用。官方动态注册无需客户端密钥，但仍需用户授权并获得计划调用权限。
@@ -62,7 +62,7 @@ ChatGPT 用户也可以选择本模式；它不使用 ChatGPT 订阅额度。
 
 支持的协议是 OpenAI Chat Completions 兼容接口：文本与 PNG `image_url` 输入、字符串 `message.content` 输出。必须选支持图片输入的模型；只有文字功能、只有 Responses API 或需要额外专有参数的接口不能直接使用。API 模式当前一次性显示完整回答，不流式显示。
 
-DeepSeek、Qwen/百炼等是否能用，取决于其当前具体模型和接口兼容性，不能仅凭品牌判断。请查服务商官方控制台及文档：[DeepSeek](https://api-docs.deepseek.com/)、[Qwen/百炼视觉接口](https://help.aliyun.com/zh/model-studio/vision)。未用真实第三方 Key 验证这些服务，本软件的 API 自动测试采用本地模拟响应。
+DeepSeek、Qwen/百炼等是否能用，取决于其当前具体模型和接口兼容性，不能仅凭品牌判断。请查服务商官方控制台及文档：[DeepSeek](https://api-docs.deepseek.com/)、[Qwen/百炼视觉接口](https://help.aliyun.com/zh/model-studio/vision)。
 
 Key 由 Windows DPAPI 按当前用户加密保存。更换服务地址需重新输入 Key；留空可保留当前地址的已存 Key。不要将自己的 Key 发给软件作者或其他使用者。
 
@@ -87,7 +87,7 @@ Key 由 Windows DPAPI 按当前用户加密保存。更换服务地址需重新�
 | 问题 | 处理 |
 | --- | --- |
 | 快捷键无效 | 在设置中改成未被占用的组合，点“截图快捷键”；也可用头像右键截图 |
-| 缺少桥接依赖 | 检查 bridge-config.json 三个绝对路径、Python 依赖和 Chrome 安装 |
+| 缺少桥接依赖 | 检查 bridge-config.json 三个绝对路径、Python 依赖和 Chrome 安装；App Server 更新后若路径变化，请修改 Codex 字段 |
 | 授权失效/权限不足 | ChatGPT 模式重新点 ChatGPT 授权；API 模式检查 Key、地址、模型权限 |
 | 429/限额 | 到所选服务的用量页检查，稍后重试，不要连续重复发送 |
 | 图片过大/超时 | 缩小选区。失败或取消不保证服务端没有计费 |
@@ -125,9 +125,9 @@ Key 由 Windows DPAPI 按当前用户加密保存。更换服务地址需重新�
 
 ### 头像保存位置
 
-头像保存在 `%USERPROFILE%\.chatgpt-assistant\avatar.png`，重启后继续使用。旧版头像会自动迁移；选择默认头像后不会重新导入旧照片。此目录是个人数据，不属于程序分发文件。
+头像保存在 `%USERPROFILE%\.chatgpt-assistant\avatar.png`，重启后继续使用。旧版头像会自动迁移；选择默认头像后不会重新导入旧照片。
 
 
 ## 头像与快捷方式图标同步
 
-更换头像、恢复默认或撤回时，窗口图标及指向当前 EXE 的桌面、任务栏固定快捷方式会一起更新。个人 ICO 只生成在本机 `%USERPROFILE%/.chatgpt-assistant/`，分享包保留默认图标。指向其他版本 EXE 的快捷方式不会修改。Windows 图标缓存可能延迟刷新；任务栏显示效果尚未完成目视验收。
+更换头像、恢复默认或撤回时，窗口图标及指向当前 EXE 的桌面、任务栏固定快捷方式会一起更新。个人 ICO 只生成在本机 `%USERPROFILE%/.chatgpt-assistant/`。指向其他版本 EXE 的快捷方式不会修改。Windows 图标缓存可能延迟刷新。

@@ -1,0 +1,52 @@
+ChatGPT assistant 0.1.2 — macOS Apple Silicon
+
+1. Requirements
+• An Apple Silicon Mac (M1/M2/M3/M4, etc.) running macOS 13 or later.
+• Intel Macs are not supported. Tested on an Apple Silicon Mac running macOS 26.6.2; other versions have not all been tested.
+• Python is included. You do not need to install Python, Codex, the ChatGPT desktop app, or Chrome.
+• AI features require an internet connection and your own eligible ChatGPT authorization or API account.
+
+2. Installation and first launch
+1. Download ChatGPT-assistant-arm64.zip from the project's GitHub Releases.
+2. Extract the ZIP, drag ChatGPT assistant.app into Applications, and open it.
+3. This GitHub build uses a fixed local signing certificate and is not notarized with Apple Developer ID. macOS may say it cannot verify the developer.
+4. After confirming the download came from the project's official Release, try opening it once. Then go to System Settings → Privacy & Security, find the blocked app, choose Open Anyway, and follow the prompts.
+5. If macOS reports malware or damage, or Open Anyway never appears, stop and check the download source and SHA256.txt, then report the problem to the project. Do not disable Gatekeeper or SIP, or run commands that disable security globally.
+
+3. ChatGPT authorization
+1. On first launch, the settings area opens at the bottom. Click “ChatGPT 授权” (ChatGPT authorization).
+2. The app opens your default browser. Sign in to your own ChatGPT account and review the official request to use your plan allowance.
+3. Return to the app after authorization. It will attempt to load the model catalog; you can also click “刷新模型” (Refresh models). Select a model available to your account and send a text message.
+4. Access depends on OpenAI account eligibility, region, model permissions, and limits. Signing in does not guarantee access to every model. If your plan is not eligible, use your own API service instead.
+5. Authorization is specific to this app. It does not read other apps' sign-in settings. Credentials are stored in your Mac's Keychain.
+
+4. Custom API
+1. Expand “设置与账户” (Settings & account) and click “API 设置” (API settings).
+2. Select a provider and enter its compatible service address and your own API Key.
+3. Enter the API Base URL (usually ending in /v1), not a URL ending in /chat/completions. Replace the Qwen placeholder with your actual service address.
+4. Click Refresh models and choose a model, or enter its model ID directly. Some providers do not offer a model-list endpoint; enter the ID manually in that case.
+5. Click “保存并启用” (Save and enable). Your provider may charge for requests; check your allowance.
+6. API and ChatGPT model selections are saved separately. Click ChatGPT authorization to switch back to ChatGPT mode.
+7. Leaving the API Key blank preserves only the key already saved for the same service address. Keys are not reused across different addresses.
+
+5. Screen capture permission
+1. Click “框选截图” (Capture region) and grant Screen & System Audio Recording permission (called Screen Recording on some macOS versions).
+2. If the app is missing from the list, click +, select ChatGPT assistant.app in Applications, and enable it.
+3. Quit and reopen the app when prompted. Closing the window only hides it; use the app menu to quit completely.
+4. Drag to select a region. A preview and “已截图，尚未发送” (Captured, not sent) indicate success. The screenshot is sent to your selected service only when you click Send or Translate.
+5. Choose an image-capable model for screenshots. The main page displays image support; API models without explicit capability information are marked unknown.
+6. Normal updates retain the same signing identity. Screen capture permission was retained in a local same-certificate update test. First installation, a future signing certificate change, or macOS permission policy may still require confirmation.
+
+6. Common operations
+• Defaults: Ctrl+Shift+Space to capture, Enter to send, Shift+Enter for a new line. Change these in shortcut settings.
+• A− / A+ adjusts answer size. “放大截图” enlarges the screenshot; “编辑源码” edits Markdown/LaTeX; “预览公式” previews formatted math.
+• The default avatar displays “自”. Changing it updates the floating button, Dock, and app file icon to your selected avatar.
+• Your avatar, model selections, shortcuts, and authorization are stored only on your device.
+
+7. Updating
+Quit the app completely, replace the old app in the same installation location, and reopen it. Do not run multiple copies from different folders. Replacing the .app does not remove your local avatar, model selection, or Keychain authorization.
+
+References
+Apple: Safely open apps on your Mac https://support.apple.com/102445
+OpenAI: ChatGPT authorization and plan eligibility https://developers.openai.com/cookbook/articles/sign-in-with-chatgpt
+OpenAI: Models and direct inference https://developers.openai.com/siwc/token-sharing-open-source/models-and-inference
