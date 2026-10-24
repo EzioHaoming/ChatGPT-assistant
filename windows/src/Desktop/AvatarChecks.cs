@@ -23,7 +23,17 @@ internal static class AvatarChecks
             AvatarStore.Reset();AvatarStore.Undo();results["repeated_reset_preserves_original"]=File.ReadAllBytes(Path.Combine(folder,"avatar.png")).SequenceEqual(before);
             AvatarStore.Set(source);AvatarStore.Undo();results["undo_replacement"]=File.ReadAllBytes(Path.Combine(folder,"avatar.png")).SequenceEqual(before)&&!AvatarStore.CanUndo;
             AvatarStore.Reset();AvatarStore.Folder=original;AvatarStore.Folder=folder;results["undo_survives_reload"]=AvatarStore.CanUndo;AvatarStore.Undo();results["restored_image_decodes"]=AvatarStore.Load()!=null;
-            _=new App();var assistant=new AssistantWindow();FloatingButton floating;
+            _=new App();
+            var links=Path.Combine(folder,"links");Directory.CreateDirectory(links);
+            dynamic shell=Activator.CreateInstance(Type.GetTypeFromProgID("WScript.Shell")!)!;
+            var linkPath=Path.Combine(links,"assistant.lnk");dynamic link=shell.CreateShortcut(linkPath);link.TargetPath=Environment.ProcessPath!;link.Arguments="--retained";link.Save();System.Runtime.InteropServices.Marshal.FinalReleaseComObject(link);
+            dynamic other=shell.CreateShortcut(Path.Combine(links,"other.lnk"));other.TargetPath=Path.Combine(folder,"other.exe");other.IconLocation="other.ico,0";other.Save();System.Runtime.InteropServices.Marshal.FinalReleaseComObject(other);
+            var customIcon=AvatarShell.CreateIcon();results["custom_ico_decodes"]=BitmapFrame.Create(new Uri(customIcon)).PixelWidth==256;
+            results["only_matching_shortcut_updated"]=AvatarShell.UpdateLinks(links,Environment.ProcessPath!,customIcon)==1;
+            link=shell.CreateShortcut(linkPath);results["shortcut_icon_and_arguments"]=((string)link.IconLocation).StartsWith(customIcon)&&((string)link.Arguments)=="--retained";System.Runtime.InteropServices.Marshal.FinalReleaseComObject(link);
+            AvatarStore.Reset();var defaultIcon=AvatarShell.CreateIcon();AvatarShell.UpdateLinks(links,Environment.ProcessPath!,defaultIcon);link=shell.CreateShortcut(linkPath);results["reset_shortcut"]=defaultIcon!=customIcon&&((string)link.IconLocation).StartsWith(defaultIcon);System.Runtime.InteropServices.Marshal.FinalReleaseComObject(link);
+            AvatarStore.Undo();var undoIcon=AvatarShell.CreateIcon();AvatarShell.UpdateLinks(links,Environment.ProcessPath!,undoIcon);link=shell.CreateShortcut(linkPath);results["undo_shortcut"]=undoIcon==customIcon&&((string)link.IconLocation).StartsWith(customIcon);System.Runtime.InteropServices.Marshal.FinalReleaseComObject(link);System.Runtime.InteropServices.Marshal.FinalReleaseComObject(shell);
+            var assistant=new AssistantWindow();FloatingButton floating;
             using(var locked=new FileStream(Path.Combine(folder,"avatar.png"),FileMode.Open,FileAccess.Read,FileShare.None))
             {
                 floating=new FloatingButton(assistant);

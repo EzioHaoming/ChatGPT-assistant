@@ -1,4 +1,4 @@
-﻿using System.IO;
+using System.IO;
 using System.Text.Json;
 using System.Windows;
 using System.Windows.Controls;
@@ -57,7 +57,7 @@ internal sealed class App : Application
         using var restoreSignal=new EventWaitHandle(false,EventResetMode.AutoReset,"Local\\ScreenshotAssistant_Restore");
         using var mutex=new Mutex(true,"Local\\ScreenshotAssistant_LocalStage",out bool first);
         if(!first){restoreSignal.Set();return 0;}
-        try{AvatarStore.Initialize();}
+        try{AvatarStore.Initialize();AvatarShell.Sync();}
         catch(Exception e){MessageBox.Show("头像迁移未完成，下次启动会重试："+e.GetType().Name,"ChatGPT assistant");}
         var app=new App{ShutdownMode=ShutdownMode.OnExplicitShutdown};
         Trace("application_start");
@@ -208,8 +208,8 @@ internal sealed class AssistantWindow : Window
         apiSettings.Click+=async(_,_)=>{if(busy||loadingModels){status.Text="请等待当前请求或模型列表加载完成。";return;}if(new ApiSettingsWindow{Owner=this}.ShowDialog()==true)await LoadModels();};
         var undoAvatar=new Button{Content="撤回头像更改",IsEnabled=AvatarStore.CanUndo};
         var avatarSettings=new Button{Content="更换头像"};customRow.Children.Add(avatarSettings);
-        avatarSettings.Click+=(_,_)=>{var picker=new Microsoft.Win32.OpenFileDialog{Filter="图片|*.png;*.jpg;*.jpeg;*.bmp",Title="选择悬浮头像（正方形图片效果最佳）"};if(picker.ShowDialog(this)==true){try{AvatarStore.Set(picker.FileName);undoAvatar.IsEnabled=AvatarStore.CanUndo;floating?.ReloadAvatar();Icon=AvatarStore.WindowIcon();status.Text="头像已更换，只保存于本机。";}catch{status.Text="头像加载失败，请选择小于 20 MB、有效的 PNG/JPG/BMP 图片。";}}};
-        var resetAvatar=new Button{Content="默认头像"};customRow.Children.Add(resetAvatar);resetAvatar.Click+=(_,_)=>{try{AvatarStore.Reset();undoAvatar.IsEnabled=AvatarStore.CanUndo;floating?.ReloadAvatar();Icon=AvatarStore.WindowIcon();status.Text="已使用默认头像，可点击撤回头像更改。";}catch{status.Text="无法恢复默认头像。";}};
+        avatarSettings.Click+=(_,_)=>{var picker=new Microsoft.Win32.OpenFileDialog{Filter="图片|*.png;*.jpg;*.jpeg;*.bmp",Title="选择悬浮头像（正方形图片效果最佳）"};if(picker.ShowDialog(this)==true){try{AvatarStore.Set(picker.FileName);undoAvatar.IsEnabled=AvatarStore.CanUndo;floating?.ReloadAvatar();Icon=AvatarStore.WindowIcon();AvatarShell.Sync();status.Text="头像已更换，只保存于本机。";}catch{status.Text="头像加载失败，请选择小于 20 MB、有效的 PNG/JPG/BMP 图片。";}}};
+        var resetAvatar=new Button{Content="默认头像"};customRow.Children.Add(resetAvatar);resetAvatar.Click+=(_,_)=>{try{AvatarStore.Reset();undoAvatar.IsEnabled=AvatarStore.CanUndo;floating?.ReloadAvatar();Icon=AvatarStore.WindowIcon();AvatarShell.Sync();status.Text="已使用默认头像，可点击撤回头像更改。";}catch{status.Text="无法恢复默认头像。";}};
         var accountRow=new StackPanel{Orientation=Orientation.Horizontal,Margin=new Thickness(0,0,0,8)};settingsContent.Children.Add(accountRow);accountRow.Children.Add(login);
         login.Click+=async(_,_)=>await Request("login","");
         var row=new StackPanel{Orientation=Orientation.Horizontal};settingsContent.Children.Add(row);hotkey.Text=preferences.Hotkey;EnableShortcutRecording(hotkey);row.Children.Add(hotkey);
@@ -236,7 +236,7 @@ internal sealed class AssistantWindow : Window
         }
         AddEditorShortcut("发送快捷键",false);AddEditorShortcut("换行快捷键",true);
         settingsContent.Children.Add(new TextBlock{Text="发送与换行仅在输入框内生效；修改后点击对应按钮。",FontSize=12,Foreground=Brushes.SlateGray});
-        customRow.Children.Add(undoAvatar);undoAvatar.Click+=(_,_)=>{try{AvatarStore.Undo();floating?.ReloadAvatar();Icon=AvatarStore.WindowIcon();undoAvatar.IsEnabled=AvatarStore.CanUndo;status.Text="已撤回头像更改。";}catch{status.Text="撤回失败，之前的头像备份仍保留。";}};
+        customRow.Children.Add(undoAvatar);undoAvatar.Click+=(_,_)=>{try{AvatarStore.Undo();floating?.ReloadAvatar();Icon=AvatarStore.WindowIcon();AvatarShell.Sync();undoAvatar.IsEnabled=AvatarStore.CanUndo;status.Text="已撤回头像更改。";}catch{status.Text="撤回失败，之前的头像备份仍保留。";}};
         status.FontSize=12;status.Foreground=Brushes.SlateGray;status.Margin=new Thickness(0,8,0,0);footer.Children.Add(status);
         SourceInitialized+=(_,_)=>{source=HwndSource.FromHwnd(new WindowInteropHelper(this).Handle);source.AddHook(Hook);ApplyHotkey(preferences.Hotkey);};
         Closing+=(_,e)=>{if(floating!=null&&!exiting){e.Cancel=true;Hide();}};
