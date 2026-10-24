@@ -16,7 +16,7 @@ For **Windows 11 x64**. Extract the entire ZIP and run `ChatGPT assistant.exe`.
 
 For **Apple Silicon Macs (M1 or later), macOS 13+**. Extract the ZIP and move `ChatGPT assistant.app` to Applications.
 
-[User guide](docs/macos/INSTALL.en.txt) · [Source code](https://github.com/EzioHaoming/ChatGPT-assistant/releases/download/macOS-v0.1.2/ChatGPT-assistant-macOS-v0.1.2-source.zip) · [Release notes and SHA256 checksums](https://github.com/EzioHaoming/ChatGPT-assistant/releases/tag/macOS-v0.1.2)
+[User guide](docs/macos/INSTALL.en.txt) · [Source code](https://github.com/EzioHaoming/ChatGPT-assistant/releases/download/macOS-v0.1.2/ChatGPT-assistant-macOS-v0.1.2-source.zip) · [Browse Mac source](macos/) · [Release notes and SHA256 checksums](https://github.com/EzioHaoming/ChatGPT-assistant/releases/tag/macOS-v0.1.2)
 
 On first launch, you may need to select Open Anyway in System Settings → Privacy & Security. This build is not notarized by Apple. See `SOURCE-BUILD.md` inside the source archive for build instructions.
 

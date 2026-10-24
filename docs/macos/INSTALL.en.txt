@@ -22,6 +22,7 @@ Using this app through ChatGPT authorization consumes your Codex / ChatGPT Work 
 5. Authorization is specific to this app. It does not read other apps' sign-in settings. Credentials are stored in your Mac's Keychain.
 
 4. Custom API
+Custom API requests use the selected provider’s API account allowance; fees and limits are set by that provider.
 1. Expand “设置与账户” (Settings & account) and click “API 设置” (API settings).
 2. Select a provider and enter its compatible service address and your own API Key.
 3. Enter the API Base URL (usually ending in /v1), not a URL ending in /chat/completions. Replace the Qwen placeholder with your actual service address.
@@ -41,7 +42,7 @@ Using this app through ChatGPT authorization consumes your Codex / ChatGPT Work 
 6. Common operations
 • Defaults: Ctrl+Shift+Space to capture, Enter to send, Shift+Enter for a new line. Change these in shortcut settings.
 • A− / A+ adjusts answer size. “放大截图” enlarges the screenshot; “编辑源码” edits Markdown/LaTeX; “预览公式” previews formatted math.
-• The default avatar displays “自”. Changing it updates the floating button, Dock, and app file icon to your selected avatar.
+• The default avatar displays “自”. Changing it updates the floating button and Dock to your selected avatar; the app file keeps its default icon.
 • Your avatar, model selections, shortcuts, and authorization are stored only on your device.
 
 7. Updating

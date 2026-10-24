@@ -1,0 +1,11 @@
+PyJWT==2.15.1
+cffi==2.1.1
+cryptography==50.0.2
+jaraco.classes==3.4.0
+jaraco.context==6.1.2
+jaraco.functools==4.6.0
+keyring==25.7.0
+more-itertools==11.2.1
+pillow==12.3.0
+pip==25.0.1
+pycparser==3.12

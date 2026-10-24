@@ -16,7 +16,7 @@
 
 适用于 **Apple 芯片 Mac（M1 及更新芯片），macOS 13+**。解压后将 `ChatGPT assistant.app` 拖入“应用程序”文件夹。
 
-[使用说明](docs/macos/INSTALL.zh-CN.txt) · [源码](https://github.com/EzioHaoming/ChatGPT-assistant/releases/download/macOS-v0.1.2/ChatGPT-assistant-macOS-v0.1.2-source.zip) · [发布说明与 SHA256 校验文件](https://github.com/EzioHaoming/ChatGPT-assistant/releases/tag/macOS-v0.1.2)
+[使用说明](docs/macos/INSTALL.zh-CN.txt) · [源码](https://github.com/EzioHaoming/ChatGPT-assistant/releases/download/macOS-v0.1.2/ChatGPT-assistant-macOS-v0.1.2-source.zip) · [浏览 Mac 源码](macos/) · [发布说明与 SHA256 校验文件](https://github.com/EzioHaoming/ChatGPT-assistant/releases/tag/macOS-v0.1.2)
 
 首次打开可能需要在“系统设置 → 隐私与安全性”中选择“仍要打开”（本版本尚未经过 Apple 公证）。源码包的构建方法见包内 `SOURCE-BUILD.md`。
 
