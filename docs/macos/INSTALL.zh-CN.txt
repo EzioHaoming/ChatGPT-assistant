@@ -2,7 +2,7 @@ ChatGPT assistant 0.1.2 — macOS Apple Silicon
 
 一、适用设备
 • Apple 芯片 Mac（M1/M2/M3/M4 等），macOS 13 或更新版本。
-• 此包不支持 Intel Mac。已在 macOS 26.6.2 的 Apple 芯片 Mac 实测；其他系统版本尚未逐一测试。
+• 此包不支持 Intel Mac。
 • 已内置 Python 运行环境，不需要自行安装 Python、Codex、ChatGPT 桌面版或 Chrome。
 • 使用 AI 功能需要联网，以及你自己的可用 ChatGPT 授权或 API 服务账号。
 
@@ -35,7 +35,7 @@ ChatGPT assistant 0.1.2 — macOS Apple Silicon
 3. 按系统提示退出并重新打开。关闭窗口只会收起界面，不等于退出；可使用应用菜单退出。
 4. 拖动鼠标框选区域。看到预览和“已截图，尚未发送”后，说明截图成功。只有点击发送或翻译时才会把截图交给你选择的服务。
 5. 使用支持图片的模型处理截图；主页面会显示图片能力，未明确报告能力的 API 模型会标为未知。
-6. 正常更新沿用相同签名身份；本机已实测同证书更新后截图权限保留。首次安装、未来更换签名证书或 macOS 自身的权限政策仍可能要求确认。
+6. 正常更新沿用相同签名身份；首次安装、未来更换签名证书或 macOS 自身的权限政策仍可能要求确认。
 
 六、常用操作
 • 默认 Ctrl+Shift+Space 截图；Enter 发送；Shift+Enter 换行。可在“快捷键设置”中修改。

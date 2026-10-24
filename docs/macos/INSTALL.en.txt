@@ -2,7 +2,7 @@ ChatGPT assistant 0.1.2 — macOS Apple Silicon
 
 1. Requirements
 • An Apple Silicon Mac (M1/M2/M3/M4, etc.) running macOS 13 or later.
-• Intel Macs are not supported. Tested on an Apple Silicon Mac running macOS 26.6.2; other versions have not all been tested.
+• Intel Macs are not supported.
 • Python is included. You do not need to install Python, Codex, the ChatGPT desktop app, or Chrome.
 • AI features require an internet connection and your own eligible ChatGPT authorization or API account.
 
@@ -35,7 +35,7 @@ ChatGPT assistant 0.1.2 — macOS Apple Silicon
 3. Quit and reopen the app when prompted. Closing the window only hides it; use the app menu to quit completely.
 4. Drag to select a region. A preview and “已截图，尚未发送” (Captured, not sent) indicate success. The screenshot is sent to your selected service only when you click Send or Translate.
 5. Choose an image-capable model for screenshots. The main page displays image support; API models without explicit capability information are marked unknown.
-6. Normal updates retain the same signing identity. Screen capture permission was retained in a local same-certificate update test. First installation, a future signing certificate change, or macOS permission policy may still require confirmation.
+6. Normal updates retain the same signing identity. First installation, a future signing certificate change, or macOS permission policy may still require confirmation.
 
 6. Common operations
 • Defaults: Ctrl+Shift+Space to capture, Enter to send, Shift+Enter for a new line. Change these in shortcut settings.
