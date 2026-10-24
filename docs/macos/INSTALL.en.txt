@@ -14,6 +14,7 @@ ChatGPT assistant 0.1.2 — macOS Apple Silicon
 5. If macOS reports malware or damage, or Open Anyway never appears, stop and check the download source and SHA256.txt, then report the problem to the project. Do not disable Gatekeeper or SIP, or run commands that disable security globally.
 
 3. ChatGPT authorization
+Using this app through ChatGPT authorization consumes your Codex / ChatGPT Work plan allowance, not the message allowance for ordinary ChatGPT web chats. The allowance available to you is shown on your account authorization page.
 1. On first launch, the settings area opens at the bottom. Click “ChatGPT 授权” (ChatGPT authorization).
 2. The app opens your default browser. Sign in to your own ChatGPT account and review the official request to use your plan allowance.
 3. Return to the app after authorization. It will attempt to load the model catalog; you can also click “刷新模型” (Refresh models). Select a model available to your account and send a text message.
