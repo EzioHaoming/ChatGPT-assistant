@@ -4,6 +4,8 @@
 
 ## 先选使用方式
 
+**通过 ChatGPT 授权使用本软件，消耗的是你的 Codex / ChatGPT Work 计划额度，不是普通 ChatGPT 网页聊天的消息额度。** 具体可用额度以你的账号授权页面为准。
+
 | 方式 | 需要准备 | 用量来源 |
 | --- | --- | --- |
 | ChatGPT 授权 | 符合条件的 ChatGPT 账号、Chrome、Python、兼容 Codex App Server、本人浏览器授权 | 账号允许的 Codex / ChatGPT Work 计划额度；具体权限和超限设置以官方页面为准 |

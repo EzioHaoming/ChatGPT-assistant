@@ -4,6 +4,8 @@ Requires Windows 11 x64. Interface labels below include the Chinese labels shown
 
 ## Install and choose a service
 
+**Using this app through ChatGPT authorization consumes your Codex / ChatGPT Work plan allowance, not the message allowance for ordinary ChatGPT web chats.** The allowance available to you is shown on your account authorization page.
+
 Extract the entire Windows ZIP and run `ChatGPT assistant.exe`. Keep the adjacent DLLs and licenses folder; do not run the EXE inside the ZIP.
 
 Choose either ChatGPT authorization with your own eligible account, or a compatible API service with your own API Key. Website chat accounts do not automatically grant API access. The app does not switch services automatically on failure.
