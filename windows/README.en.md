@@ -47,7 +47,7 @@ References: https://learn.chatgpt.com/docs/sign-in-with-chatgpt • https://deve
 2. Open API settings and enable Use custom API.
 3. Enter the Base URL, model ID, and key. Do not append `/chat/completions`; the app adds it. Retain required prefixes such as `/v1` or `/compatible-mode/v1`. Do not mix regions or workspaces.
 4. Save, then send a message or a small screenshot to check connectivity. Saving alone sends no model request; sending may incur charges.
-5. Check usage, billing, free allowance, and limits in your provider's console. Free tiers are provider-specific and may expire. API mode does not use your ChatGPT subscription allowance.
+5. Check usage, billing, free allowance, and limits in your provider's console. Free tiers are provider-specific and may expire. API mode does not use your ChatGPT subscription allowance. It uses the balance, free allowance, or paid quota of the API account you configured, with usage and charges determined by that provider. For example, configuring Qwen / Bailian uses your Bailian API account allowance.
 
 The supported protocol is OpenAI Chat Completions compatible: text and PNG `image_url` input with string `message.content` output. Responses-only or provider-specific interfaces are not supported. API answers appear when complete, without streaming.
 

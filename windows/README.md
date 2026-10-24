@@ -52,7 +52,7 @@ Copy-Item bridge-config.example.json bridge-config.json
 
 ## B. 其他用户：自定义 API 模式
 
-ChatGPT 用户也可以选择本模式；它不使用 ChatGPT 订阅额度。
+ChatGPT 用户也可以选择本模式；它不使用 ChatGPT 订阅额度，而是使用你所配置的服务商 API 账户的余额、免费额度或付费配额，具体用量和费用由该服务商计算。例如，配置 Qwen / 百炼 API，就使用你的百炼 API 账户额度。
 
 1. 到服务商开发者控制台申请自己的 API Key，确认可调用的视觉模型、兼容接口地址和计费规则。
 2. 在“设置与账户 → API 设置”勾选“使用自定义 API”。
