@@ -18,6 +18,12 @@ internal sealed class App : Application
     }
     [STAThread] public static int Main(string[] args)
     {
+        if(args.Length==2&&args[0]=="--test-bridge-models")
+        {
+            try{AiBridge.Run("models","","",_=>{},(text,usage)=>File.WriteAllText(args[1],text),CancellationToken.None).GetAwaiter().GetResult();return 0;}
+            catch(Exception e){File.WriteAllText(args[1],e.GetType().Name+": "+e.Message);return 1;}
+        }
+        if(args.Length==2&&args[0]=="--test-codex-path")return CodexLocator.Check(args[1]);
         if(args.Length==2&&args[0]=="--test-avatar-undo")return AvatarChecks.Run(args[1]);
         if(args.Length==2&&args[0]=="--test-recovery")
         {
