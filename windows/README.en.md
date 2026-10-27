@@ -6,7 +6,7 @@ Requires Windows 11 x64. Interface labels below include the Chinese labels shown
 
 **Using this app through ChatGPT authorization consumes your Codex / ChatGPT Work plan allowance, not the message allowance for ordinary ChatGPT web chats.** The allowance available to you is shown on your account authorization page.
 
-Extract the entire Windows ZIP and run `ChatGPT assistant.exe`. Keep the adjacent DLLs and licenses folder; do not run the EXE inside the ZIP.
+Extract the entire Windows ZIP and run `ChatGPT assistant.exe`. Keep the adjacent DLLs and the Renderer, runtimes, and licenses folders; do not run the EXE inside the ZIP.
 
 Choose either ChatGPT authorization with your own eligible account, or a compatible API service with your own API Key. Website chat accounts do not automatically grant API access. The app does not switch services automatically on failure.
 
@@ -73,7 +73,7 @@ The preset only fills fields; it does not enable the service or send requests. S
 - Click “翻译成中文” (Translate into Chinese), or type a question and click “发送” (Send).
 - You can ask text-only questions without a screenshot. If a screenshot is attached, click × in its preview to remove it. Translation requires a screenshot.
 - Each request is independent and includes the current screenshot, if any. Previous answers are not automatically included; add any needed context to your question.
-- Answers support Markdown and formulas. A− / A+ changes text size; “复制回答” copies the answer. Removing a screenshot retains the answer.
+- Answers use offline KaTeX for Markdown and formulas, including matrices, cases, aligned equations, and equation numbers. Typesetting itself makes no model request. A− / A+ changes text size; “复制回答” copies the answer. Removing a screenshot retains the answer.
 - Screenshots and questions are sent to your selected service. Screenshots and answers stay in memory by default and disappear on exit. Copying puts content on the system clipboard.
 
 ## Floating button and avatar
@@ -105,3 +105,9 @@ Send and New line accept Enter, F1–F11, or Ctrl/Alt with a letter or digit (op
 - Large image or timeout: capture a smaller area. Failure or cancellation does not guarantee no service-side usage.
 - Model-list error: configure your service first, then refresh. Change API model IDs in API settings.
 - To update, exit the old app from its avatar menu before opening the new version.
+
+## Formula display
+
+Formula display requires Microsoft Edge WebView2 Runtime (normally installed on Windows 11). If the renderer cannot start, install or repair WebView2 Runtime and keep the Renderer folder next to the EXE. Authorization still opens in Chrome.
+
+Wide formulas scroll horizontally. Copy answer preserves the original Markdown and LaTeX. Incomplete streaming formulas show a waiting message; special LaTeX packages or invalid syntax may not render.

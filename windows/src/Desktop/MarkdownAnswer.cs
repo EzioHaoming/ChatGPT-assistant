@@ -101,13 +101,16 @@ internal sealed class MarkdownAnswer : RichTextBox
                     if(math.Source.Length>4000)throw new InvalidOperationException();
                     var normalized=Regex.Replace(math.Source,@"\\tag\{([^{}]*)\}",m=>@"\qquad("+m.Groups[1].Value+")");
                     normalized=Regex.Replace(normalized,@"\\(?:boldsymbol|bm)\b",@"\mathbf");
+                    // The native engine supports automatic paired delimiters, not TeX's
+                    // explicit big/Big/bigg/Bigg sizing commands. Preserve delimiter glyphs.
+                    normalized=Regex.Replace(normalized,@"\\(?:big|Big|bigg|Bigg)l\b",@"\left");
+                    normalized=Regex.Replace(normalized,@"\\(?:big|Big|bigg|Bigg)r\b",@"\right");
+                    normalized=Regex.Replace(normalized,@"\\(?:big|Big|bigg|Bigg)m?\b","");
                     normalized=Regex.Replace(normalized,@"\\[A-Za-z]+(?=[^A-Za-z\s]|$)","$0 ");
                     string cacheKey=$"{FontSize}:{math.Display}:{normalized}";
                     if(!formulaCache.TryGetValue(cacheKey,out var bitmap))
                     {
-                        var painter=new MathPainter{LaTeX=normalized,FontSize=(float)(FontSize*2)};
-                        if(painter.ErrorMessage is not null)throw new InvalidOperationException(painter.ErrorMessage);
-                        using var png=painter.DrawAsStream()??throw new InvalidOperationException("Formula image unavailable");
+                        using var png=RenderFormula(normalized,(float)(FontSize*2));
                         var decoded=new BitmapImage();decoded.BeginInit();decoded.CacheOption=BitmapCacheOption.OnLoad;decoded.StreamSource=png;decoded.EndInit();decoded.Freeze();bitmap=decoded;
                         if(formulaCache.Count>=256)formulaCache.Clear();formulaCache[cacheKey]=bitmap;
                     }
@@ -131,6 +134,13 @@ internal sealed class MarkdownAnswer : RichTextBox
                 var span=new Span();foreach(var child in container)span.Inlines.Add(RenderInline(child));return span;
             default:return new Run("");
         }
+    }
+    static System.IO.Stream RenderFormula(string latex,float size)
+    {
+        if(Regex.IsMatch(latex,@"\\(?:underbrace|overbrace)\b"))return AnnotatedMath.Render(latex,size);
+        var painter=new MathPainter{LaTeX=latex,FontSize=size};
+        if(painter.ErrorMessage is not null)throw new InvalidOperationException(painter.ErrorMessage);
+        return painter.DrawAsStream()??throw new InvalidOperationException("Formula image unavailable");
     }
 }
 

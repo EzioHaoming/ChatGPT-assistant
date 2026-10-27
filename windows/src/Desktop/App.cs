@@ -18,6 +18,7 @@ internal sealed class App : Application
     }
     [STAThread] public static int Main(string[] args)
     {
+        if(args.Length==2&&args[0]=="--test-rich-math")return RichMathChecks.Run(args[1]);
         if(args.Length==2&&args[0]=="--test-bridge-models")
         {
             try{AiBridge.Run("models","","",_=>{},(text,usage)=>File.WriteAllText(args[1],text),CancellationToken.None).GetAwaiter().GetResult();return 0;}
@@ -87,7 +88,7 @@ internal sealed class AssistantWindow : Window
     readonly TextBlock placeholder=new(){Text="按 Alt+Q\n框选屏幕上的文字、公式或代码",TextAlignment=TextAlignment.Center,Foreground=Brushes.SlateGray,VerticalAlignment=VerticalAlignment.Center};
     readonly TextBox question=new(){AcceptsReturn=true,Height=56,TextWrapping=TextWrapping.Wrap,VerticalScrollBarVisibility=ScrollBarVisibility.Auto};
     readonly Expander previewPanel=new(){Header="查看截图",IsExpanded=false};
-    readonly MarkdownAnswer answer=new(){MinHeight=90};
+    readonly RichMarkdownAnswer answer=new(){MinHeight=90};
     readonly Button copyImage=new(){Content="复制截图",IsEnabled=false};
     readonly Button deleteImage=new(){Content="×",FontSize=19,Width=28,Height=28,Padding=new Thickness(0),Margin=new Thickness(4),HorizontalAlignment=HorizontalAlignment.Right,VerticalAlignment=VerticalAlignment.Top,Visibility=Visibility.Collapsed,IsEnabled=false,ToolTip="删除截图（保留回答）"};
     readonly Button capture=new(){Content="框选截图"};

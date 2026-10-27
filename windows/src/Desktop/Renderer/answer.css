@@ -1,0 +1,4 @@
+html{background:#fff;color:#161a22;font-family:"Segoe UI","Microsoft YaHei",sans-serif;font-size:18px}
+body{margin:0;padding:14px 16px;line-height:1.75;overflow-wrap:anywhere}
+p{margin:0 0 .85em}h1,h2,h3{line-height:1.4;margin:.8em 0 .5em}pre{white-space:pre-wrap;background:#f3f4f8;padding:12px;border-radius:8px}code{font-family:Consolas,monospace;font-size:.88em}blockquote{border-left:3px solid #b9c5da;margin:12px 0;padding-left:14px;color:#596579}
+.katex-display{overflow-x:auto;overflow-y:hidden;padding:8px 2px;margin:12px 0}.katex{font-size:1.1em}.math-error,.math-pending{color:#8b6518;font-size:.9em}table{border-collapse:collapse;display:block;overflow:auto}td,th{border:1px solid #d5dbe7;padding:6px 10px}a{color:inherit}img{display:none}

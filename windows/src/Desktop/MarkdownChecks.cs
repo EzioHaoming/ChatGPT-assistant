@@ -15,6 +15,19 @@ internal static class MarkdownChecks
             Check("formula "+formula,()=>{view.Text=@"\["+formula+@"\]";return view.FormulaCount==1&&view.FormulaErrors==0;});
         }
         string Visible()=>new TextRange(view.Document.ContentStart,view.Document.ContentEnd).Text;
+        const string annotated=@"\min_{\theta\in\mathbb{R}^d} F(\theta) := \underbrace{\mathbb{E}_{\xi\sim\mathbb{P}}[f(\theta;\xi)]}_{f(\theta)}+\mathcal{R}(\theta)\tag{1}";
+        Check("user expectation brace equation",()=>{view.Text=@"\["+annotated+@"\]";return view.FormulaCount==1&&view.FormulaErrors==0&&view.Text.Contains(annotated);});
+        const string sized=@"\min_{\theta\in\mathbb{R}^d} F(\theta):=\mathbb{E}_{\xi\sim\mathbb{P}}\bigl[f(\theta;\xi)\bigr]+\mathcal{R}(\theta)\tag{1}";
+        Check("user expectation sized bracket equation",()=>{view.Text=@"\["+sized+@"\]";return view.FormulaCount==1&&view.FormulaErrors==0&&view.Text.Contains(sized);});
+        foreach(string size in new[]{"big","Big","bigg","Bigg"})
+            Check(size+" paired brackets",()=>{view.Text=@"\[\"+size+@"l[\frac{x}{y}\"+size+@"r]\]";return view.FormulaCount==1&&view.FormulaErrors==0;});
+        Check("sized brackets within brace",()=>{view.Text=@"\[\underbrace{\bigl[f(x)\bigr]}_{f(x)}\]";return view.FormulaCount==1&&view.FormulaErrors==0;});
+        Check("sized separators",()=>{view.Text=@"\[\Big(x\Big)\bigm|y\]";return view.FormulaCount==1&&view.FormulaErrors==0;});
+        Check("upper brace and nested labels",()=>{view.Text=@"\[a+\overbrace{x_{i}^{2}+y}^{\frac{a}{b}}=z\]";return view.FormulaCount==1&&view.FormulaErrors==0;});
+        Check("nested braces",()=>{view.Text=@"\[\underbrace{a+\overbrace{x+y}^{z}}_{f(x)}\]";return view.FormulaCount==1&&view.FormulaErrors==0;});
+        Check("brace streaming",()=>{view.Clear();foreach(char c in @"\["+annotated+@"\]"){view.AppendText(c.ToString());view.FlushPreview();}return view.FormulaCount==1&&view.FormulaErrors==0;});
+        using(var png=AnnotatedMath.Render(annotated.Replace(@"\tag{1}",@"\qquad(1)"),36))
+        using(var file=File.Create(path+".png"))png.CopyTo(file);
         Check("paper preconditioner",()=>{view.Text=@"\(M_t=\operatorname{diag}(\mathbf{s})^{-1}\)";return view.FormulaCount==1&&view.FormulaErrors==0;});
         Check("paper bold theta",()=>{view.Text=@"\(f_t(\boldsymbol{\theta})\)";return view.FormulaCount==1&&view.FormulaErrors==0;});
         Check("paper multiline equation",()=>{view.Text=PaperEquation;return view.FormulaCount==1&&view.FormulaErrors==0&&!Visible().Contains(@"\frac")&&!Visible().Contains("未闭合");});
@@ -28,6 +41,12 @@ internal static class MarkdownChecks
         Check("html and remote image inert",()=>{view.Text="<script>alert(1)</script>\n\n![remote](https://example.invalid/image.png)";return !Visible().Contains("alert(1)")&&Visible().Contains("图片");});
         Check("escaped dollars and currency",()=>{view.Text=@"\$5 and $10 and $20";return view.FormulaCount==0;});
         Check("lists and quote",()=>{view.Text="- first\n- second\n\n> quote";return view.Document.Blocks.FirstBlock is System.Windows.Documents.List&&Visible().Contains("quote");});
+        view.Text=@"\["+sized+@"\]";
+        view.Background=System.Windows.Media.Brushes.White;
+        view.Measure(new System.Windows.Size(1000,180));view.Arrange(new System.Windows.Rect(0,0,1000,180));view.UpdateLayout();
+        var preview=new System.Windows.Media.Imaging.RenderTargetBitmap(1000,180,96,96,System.Windows.Media.PixelFormats.Pbgra32);preview.Render(view);
+        var encoder=new System.Windows.Media.Imaging.PngBitmapEncoder();encoder.Frames.Add(System.Windows.Media.Imaging.BitmapFrame.Create(preview));
+        using(var file=File.Create(path+".sized.png"))encoder.Save(file);
         File.WriteAllText(path,JsonSerializer.Serialize(checks,new JsonSerializerOptions{WriteIndented=true}));return failures==0?0:1;
     }
     internal const string PaperEquation="""
