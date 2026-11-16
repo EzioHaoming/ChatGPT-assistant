@@ -111,3 +111,7 @@ Send and New line accept Enter, F1–F11, or Ctrl/Alt with a letter or digit (op
 Formula display requires Microsoft Edge WebView2 Runtime (normally installed on Windows 11). If the renderer cannot start, install or repair WebView2 Runtime and keep the Renderer folder next to the EXE. Authorization still opens in Chrome.
 
 Wide formulas scroll horizontally. Copy answer preserves the original Markdown and LaTeX. Incomplete streaming formulas show a waiting message; special LaTeX packages or invalid syntax may not render.
+
+## Follow-up conversations
+
+Sending clears the input and keeps questions and answers in the answer area. Follow-up requests include recent text history and the current screenshot. Capturing a new image keeps the conversation; previous images are not resent. Recapture an older image if needed. New conversation clears the current history. History is kept in memory only until exit. Long conversations include up to about 48,000 characters of recent context, which may increase model usage. Failed or cancelled requests preserve history and restore the question for retry.

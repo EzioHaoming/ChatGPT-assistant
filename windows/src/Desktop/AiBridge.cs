@@ -8,8 +8,10 @@ namespace ScreenshotAssistant;
 internal sealed record BridgeConfig(string Python, string Script, string Codex);
 internal static class AiBridge
 {
+    internal static Action<string,Action<string>,Action<string,string>>? TestResponder;
     public static async Task Run(string action, string question, string png, Action<string> delta, Action<string,string> done, CancellationToken cancel, string model="gpt-6-luna")
     {
+        if(action=="ask"&&TestResponder!=null){TestResponder(question,delta,done);return;}
         if(ApiService.Current.Enabled&&action=="ask")
         {
             var result=await ApiService.Ask(ApiService.Current,question,png,cancel);done(result.Answer,result.Usage);return;

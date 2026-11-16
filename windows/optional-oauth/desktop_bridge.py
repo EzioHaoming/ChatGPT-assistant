@@ -24,8 +24,8 @@ def selected_model(request):
 
 def validate_request(request):
     question = request.get('question', '').strip()
-    if not question or len(question) > 12000:
-        raise ValueError('问题不能为空，且不能超过 12000 字符。')
+    if not question or len(question) > 64000:
+        raise ValueError('问题不能为空，且不能超过 64000 字符。')
     encoded = request.get('png', '')
     if encoded == '':
         return question, None
