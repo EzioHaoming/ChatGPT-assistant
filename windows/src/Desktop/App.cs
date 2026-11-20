@@ -170,7 +170,10 @@ internal sealed class AssistantWindow : Window
         newChat.Click+=(_,_)=>{if(busy)return;chatId=Guid.NewGuid().ToString("N");conversation.Clear();transcript="";answer.Clear();copy.IsEnabled=false;question.Clear();DeleteImage();RefreshHistory();status.Text="已开始新对话，旧记录可从历史对话中打开。";};actions.Children.Add(newChat);
         var historyRow=new DockPanel{Margin=new Thickness(0,0,0,8)};
         DockPanel.SetDock(removeChat,Dock.Right);historyRow.Children.Add(removeChat);DockPanel.SetDock(renameChat,Dock.Right);historyRow.Children.Add(renameChat);historyRow.Children.Add(historyPicker);header.Children.Add(historyRow);
-        historyPicker.SelectionChanged+=(_,_)=>{if(refreshingHistory||busy)return;if(historyPicker.SelectedItem is SavedChat chat)OpenChat(chat);};
+        historyPicker.SelectionChanged+=(_,_)=>{
+            renameChat.IsEnabled=!busy&&historyPicker.SelectedItem is SavedChat;
+            if(!refreshingHistory&&!busy&&historyPicker.SelectedItem is SavedChat chat)OpenChat(chat);
+        };
         renameChat.Click+=(_,_)=>RenameSelectedChat();
         removeChat.Click+=(_,_)=>{
             if(busy||historyPicker.SelectedItem is not SavedChat chat)return;
@@ -582,6 +585,11 @@ internal sealed class AssistantWindow : Window
         await Request("ask","解释译文");
         Check("translation retained for follow-up",context.Contains("论文译文")&&conversation.Count==2);
         Check("follow-up retains translation",answer.Text.Contains("论文译文")&&answer.Text.Contains("解释译文"));
+        historyPicker.ItemsSource=reopened;
+        historyPicker.SelectedIndex=0;
+        Check("select saved chat enables rename",renameChat.IsEnabled);
+        historyPicker.SelectedIndex=-1;
+        Check("empty selection disables rename",!renameChat.IsEnabled);
         AiBridge.TestResponder=null;
         File.WriteAllText(path,JsonSerializer.Serialize(results));
     }
