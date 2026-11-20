@@ -97,6 +97,7 @@ internal sealed class AssistantWindow : Window
     string transcript="";
     string chatId=Guid.NewGuid().ToString("N");
     readonly ComboBox historyPicker=new(){MinWidth=180,MaxWidth=360,ToolTip="选择历史对话继续追问"};
+    readonly Button renameChat=new(){Content="重命名",IsEnabled=false};
     readonly Button removeChat=new(){Content="删除对话"};
     readonly ChatHistoryStore historyStore=new(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile),".chatgpt-assistant","chats"));
     bool refreshingHistory;
@@ -168,8 +169,9 @@ internal sealed class AssistantWindow : Window
         var newChat=new Button{Content="新对话",ToolTip="保存旧对话并开始新的对话"};
         newChat.Click+=(_,_)=>{if(busy)return;chatId=Guid.NewGuid().ToString("N");conversation.Clear();transcript="";answer.Clear();copy.IsEnabled=false;question.Clear();DeleteImage();RefreshHistory();status.Text="已开始新对话，旧记录可从历史对话中打开。";};actions.Children.Add(newChat);
         var historyRow=new DockPanel{Margin=new Thickness(0,0,0,8)};
-        DockPanel.SetDock(removeChat,Dock.Right);historyRow.Children.Add(removeChat);historyRow.Children.Add(historyPicker);header.Children.Add(historyRow);
+        DockPanel.SetDock(removeChat,Dock.Right);historyRow.Children.Add(removeChat);DockPanel.SetDock(renameChat,Dock.Right);historyRow.Children.Add(renameChat);historyRow.Children.Add(historyPicker);header.Children.Add(historyRow);
         historyPicker.SelectionChanged+=(_,_)=>{if(refreshingHistory||busy)return;if(historyPicker.SelectedItem is SavedChat chat)OpenChat(chat);};
+        renameChat.Click+=(_,_)=>RenameSelectedChat();
         removeChat.Click+=(_,_)=>{
             if(busy||historyPicker.SelectedItem is not SavedChat chat)return;
             if(MessageBox.Show("删除这段对话的所有问题与回答？此操作无法撤回。","删除对话",MessageBoxButton.YesNo,MessageBoxImage.Question)!=MessageBoxResult.Yes)return;
@@ -455,7 +457,7 @@ internal sealed class AssistantWindow : Window
         if(busy)return;
         if(action=="ask"&&string.IsNullOrWhiteSpace(prompt)){status.Text="请填写问题。";return;}
         if(prompt.Length>12000){status.Text="问题不能超过 12000 字符。";return;}
-        busy=true;historyPicker.IsEnabled=removeChat.IsEnabled=false;modelPicker.IsEnabled=refreshModels.IsEnabled=false;deleteImage.IsEnabled=capture.IsEnabled=translate.IsEnabled=send.IsEnabled=login.IsEnabled=false;stop.IsEnabled=true;
+        busy=true;renameChat.IsEnabled=false;historyPicker.IsEnabled=removeChat.IsEnabled=false;modelPicker.IsEnabled=refreshModels.IsEnabled=false;deleteImage.IsEnabled=capture.IsEnabled=translate.IsEnabled=send.IsEnabled=login.IsEnabled=false;stop.IsEnabled=true;
         requestCancellation=new CancellationTokenSource(TimeSpan.FromSeconds(action=="login"?930:240));
         string previous=transcript;
         string heading="";
@@ -495,14 +497,35 @@ internal sealed class AssistantWindow : Window
         }
         catch(OperationCanceledException){status.Text="已取消或超时；已提交请求仍可能计入用量。";if(action=="ask"){transcript=previous+heading+"*请求已取消，未加入追问上下文。*";answer.Text=transcript;copy.IsEnabled=true;if(!translation&&string.IsNullOrEmpty(question.Text))question.Text=prompt;}if(action=="ask")SaveChat();App.Trace("request_cancelled");}
         catch(Exception e){status.Text=e is InvalidOperationException||e is IOException?e.Message:"请求失败，请检查依赖或重试。";if(action=="ask"){transcript=previous+heading+"*请求失败，未加入追问上下文。*";answer.Text=transcript;copy.IsEnabled=true;if(!translation&&string.IsNullOrEmpty(question.Text))question.Text=prompt;}if(action=="ask")SaveChat();App.Trace("request_failed "+e.GetType().Name);}
-        finally{requestCancellation.Dispose();requestCancellation=null;busy=false;historyPicker.IsEnabled=removeChat.IsEnabled=true;if(!closed){modelPicker.IsEnabled=refreshModels.IsEnabled=!loadingModels;capture.IsEnabled=login.IsEnabled=true;deleteImage.IsEnabled=translate.IsEnabled=selectedImage!=null;send.IsEnabled=true;stop.IsEnabled=false;}}
+        finally{requestCancellation.Dispose();requestCancellation=null;busy=false;renameChat.IsEnabled=historyPicker.SelectedItem is SavedChat;historyPicker.IsEnabled=removeChat.IsEnabled=true;if(!closed){modelPicker.IsEnabled=refreshModels.IsEnabled=!loadingModels;capture.IsEnabled=login.IsEnabled=true;deleteImage.IsEnabled=translate.IsEnabled=selectedImage!=null;send.IsEnabled=true;stop.IsEnabled=false;}}
+    }
+    void RenameSelectedChat()
+    {
+        if(busy||historyPicker.SelectedItem is not SavedChat chat)return;
+        var dialog=new Window{Title="重命名对话",Owner=this,WindowStartupLocation=WindowStartupLocation.CenterOwner,
+            Width=350,SizeToContent=SizeToContent.Height,ResizeMode=ResizeMode.NoResize,ShowInTaskbar=false};
+        var panel=new StackPanel{Margin=new Thickness(16)};
+        var input=new TextBox{Text=chat.Title,MaxLength=80};
+        var save=new Button{Content="保存",IsDefault=true};
+        var cancel=new Button{Content="取消",IsCancel=true};
+        var buttons=new StackPanel{Orientation=Orientation.Horizontal,HorizontalAlignment=HorizontalAlignment.Right,Margin=new Thickness(0,12,0,0)};
+        buttons.Children.Add(cancel);buttons.Children.Add(save);
+        panel.Children.Add(new TextBlock{Text="对话名称"});panel.Children.Add(input);panel.Children.Add(buttons);
+        dialog.Content=panel;
+        input.TextChanged+=(_,_)=>save.IsEnabled=!string.IsNullOrWhiteSpace(input.Text);
+        save.Click+=(_,_)=>dialog.DialogResult=true;
+        dialog.Loaded+=(_,_)=>{input.Focus();input.SelectAll();};
+        if(dialog.ShowDialog()!=true||string.IsNullOrWhiteSpace(input.Text))return;
+        try{historyStore.Save(chat with{Title=input.Text.Trim(),HasCustomTitle=true});RefreshHistory();status.Text="对话已重命名。";}
+        catch(IOException){status.Text="无法保存名称，请检查聊天目录。";}
+        catch(UnauthorizedAccessException){status.Text="没有权限保存对话名称。";}
     }
     void RefreshHistory()
     {
         if(historyDisabled)return;
         refreshingHistory=true;
         try{var chats=historyStore.Load();historyPicker.ItemsSource=chats;historyPicker.SelectedItem=chats.FirstOrDefault(x=>x.Id==chatId);}
-        finally{refreshingHistory=false;}
+        finally{refreshingHistory=false;renameChat.IsEnabled=!busy&&historyPicker.SelectedItem is SavedChat;}
     }
     void OpenChat(SavedChat chat)
     {
@@ -515,7 +538,9 @@ internal sealed class AssistantWindow : Window
         if(historyDisabled||transcript.Length==0)return;
         try{
             string title=conversation.FirstOrDefault().Question??"未完成的对话";title=title.Replace("\r"," ").Replace("\n"," ");if(title.Length>32)title=title[..32]+"…";
-            historyStore.Save(new(chatId,title,DateTimeOffset.Now,transcript,conversation.Select(x=>new SavedTurn(x.Question,x.Answer)).ToList()));RefreshHistory();
+            var selected=historyPicker.SelectedItem as SavedChat;
+            bool custom=selected?.Id==chatId&&selected.HasCustomTitle;
+            historyStore.Save(new(chatId,custom?selected!.Title:title,DateTimeOffset.Now,transcript,conversation.Select(x=>new SavedTurn(x.Question,x.Answer)).ToList(),custom));RefreshHistory();
         }catch(Exception){status.Text+=" · 聊天记录保存失败，请保留需要的回答并检查磁盘权限。";}
     }
     internal async Task CheckConversation(string path)

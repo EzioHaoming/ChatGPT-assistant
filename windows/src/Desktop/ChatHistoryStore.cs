@@ -2,7 +2,7 @@ using System.IO;
 using System.Text.Json;
 namespace ScreenshotAssistant;
 internal sealed record SavedTurn(string Question,string Answer);
-internal sealed record SavedChat(string Id,string Title,DateTimeOffset Updated,string Transcript,List<SavedTurn> Turns)
+internal sealed record SavedChat(string Id,string Title,DateTimeOffset Updated,string Transcript,List<SavedTurn> Turns,bool HasCustomTitle=false)
 {
     public override string ToString()=>$"{Updated:MM-dd HH:mm}  {Title}";
 }
